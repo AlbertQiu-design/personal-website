@@ -1,13 +1,16 @@
+import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 import { useLensT } from './LensContext';
-import { SOLUTION_PROJECTS, SolutionId, ProjectCover } from './solutionProjects';
+import { SOLUTION_PROJECTS, SolutionId, ProjectCover, CAREEREDU_SITE } from './solutionProjects';
 import { SpringText } from './SpringText';
 
 interface SolutionCaseDetailProps {
   projectId: SolutionId;
   onNavigate?: (sectionId: string) => void;
+  /** 标题区之后、案例条目之前插入的项目内容 */
+  leading?: ReactNode;
 }
 
 const SECTIONS = ['context', 'requirements', 'workflow', 'architecture', 'validation', 'outcome', 'next'];
@@ -16,7 +19,7 @@ const SECTIONS = ['context', 'requirements', 'workflow', 'architecture', 'valida
  * BA 视角的通用案例模板：Context / Requirements / Workflow & States / Solution Architecture / Validation / Outcome / Next
  * 有内容的章节读取 case.<projectId>.<section>，没有的显示「Drafting」与引导问句。
  */
-export function SolutionCaseDetail({ projectId, onNavigate }: SolutionCaseDetailProps) {
+export function SolutionCaseDetail({ projectId, onNavigate, leading }: SolutionCaseDetailProps) {
   const { t, raw } = useLanguage();
   const { tl } = useLensT();
   const project = SOLUTION_PROJECTS[projectId];
@@ -34,7 +37,12 @@ export function SolutionCaseDetail({ projectId, onNavigate }: SolutionCaseDetail
       <div className="pt-28 md:pt-32 px-6 md:px-12 lg:px-32 pb-20">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <ProjectCover project={project} large className="rounded-3xl aspect-[4/3] md:aspect-[21/9]" />
+            <ProjectCover
+              project={project}
+              large
+              imagePosition={project.cover ? 'object-center' : undefined}
+              className={`rounded-3xl ${project.cover ? 'aspect-video' : 'aspect-[4/3] md:aspect-[21/9]'}`}
+            />
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mt-10 md:mt-16">
@@ -54,7 +62,17 @@ export function SolutionCaseDetail({ projectId, onNavigate }: SolutionCaseDetail
               <h1 className="text-3xl md:text-5xl leading-tight mb-6" style={{ fontWeight: 700 }}>
                 <SpringText text={t(`${base}.title`)} />
               </h1>
-              <p className="text-white/70 text-base md:text-lg leading-relaxed mb-8">{tl(`${base}.description`)}</p>
+              <p className={`text-white/70 text-base md:text-lg leading-relaxed ${projectId === 'careeredu' ? 'mb-3' : 'mb-8'}`}>{tl(`${base}.description`)}</p>
+              {projectId === 'careeredu' && (
+                <a
+                  href={CAREEREDU_SITE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mb-8 inline-block text-sm text-emerald-200 underline decoration-emerald-200/40 underline-offset-4 hover:decoration-emerald-200"
+                >
+                  {t('project.careeredu.viewSite')}
+                </a>
+              )}
               <dl className="divide-y divide-white/10 border-y border-white/10 font-meta text-sm">
                 {meta.map((m) => (
                   <div key={m.label} className="flex justify-between gap-4 py-3">
@@ -108,6 +126,8 @@ export function SolutionCaseDetail({ projectId, onNavigate }: SolutionCaseDetail
               </ol>
             </div>
           </div>
+
+          {leading && <div className="mt-16 md:mt-24">{leading}</div>}
 
           <div className="flex justify-center pt-16">
             <button

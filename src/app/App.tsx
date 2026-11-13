@@ -15,7 +15,8 @@ import { DocumentMeta } from "./components/DocumentMeta";
 import { LensProvider, useLens, Lens } from "./components/LensContext";
 import { LensIntro } from "./components/LensIntro";
 
-// 开屏只在每个浏览器会话首次访问时播放
+// 加载条仍可按会话跳过；选择层每次完整加载都出现。
+// 选中身份后只在当前文档里关掉，站内跳转不会再弹出，直到下一次刷新。
 const SPLASH_KEY = "aq_splash_seen";
 const hasSeenSplash = () => {
   try {
@@ -35,9 +36,11 @@ const markSplashSeen = () => {
 function AppContent() {
   const [skipIntro] = useState(hasSeenSplash);
   const [isLoading, setIsLoading] = useState(!skipIntro);
+  // 不读取 aq_splash_seen：刷新会重建文档，选择层必须重新出现。
+  const [showSplash, setShowSplash] = useState(true);
   const [currentPage, setCurrentPage] = useState<
-    "splash" | "home" | "project" | "about-me" | "contact-page"
-  >(skipIntro ? "home" : "splash");
+    "home" | "project" | "about-me" | "contact-page"
+  >("home");
   const [currentProject, setCurrentProject] =
     useState<string>("");
   const [pendingScroll, setPendingScroll] =
@@ -47,10 +50,9 @@ function AppContent() {
   const [introLens, setIntroLens] = useState<Exclude<Lens, "all"> | null>(null);
   const closeIntro = useCallback(() => setIntroLens(null), []);
 
-  // 处理加载完成
-  const handleLoadComplete = () => {
+  const handleLoadComplete = useCallback(() => {
     setIsLoading(false);
-  };
+  }, []);
 
   // 滚动到顶部当页面切换时
   useEffect(() => {
@@ -86,6 +88,7 @@ function AppContent() {
 
   const handleEnterSite = (lens: Lens) => {
     markSplashSeen();
+    setShowSplash(false);
     setLens(lens);
     if (lens !== "all") setIntroLens(lens);
     setCurrentPage("home");
@@ -108,12 +111,7 @@ function AppContent() {
       return;
     }
 
-    if (currentPage === "splash") {
-      // 从 splash 页面导航，先进入 home，然后滚动
-      markSplashSeen();
-      setPendingScroll(sectionId);
-      setCurrentPage("home");
-    } else if (currentPage === "home") {
+    if (currentPage === "home") {
       // 已经在 home 页面，直接滚动
       const element = document.getElementById(sectionId);
       if (element) {
@@ -136,34 +134,6 @@ function AppContent() {
     setCurrentPage("contact-page");
     setCurrentProject("");
   };
-
-  // 显示加载器
-  if (isLoading) {
-    return (
-      <>
-        <PageLoader onLoadComplete={handleLoadComplete} />
-      </>
-    );
-  }
-
-  // 如果在开屏页面，显示 Header 和 SplashScreen
-  if (currentPage === "splash") {
-    return (
-      <>
-        <div className="min-h-screen cursor-none bg-black">
-          <SimpleCursor />
-          <StudentHeader
-            onLogoClick={handleBackToHome}
-            onNavigate={handleNavigateToSection}
-            isHomePage={true}
-            currentPage={currentPage}
-          />
-          <SplashScreen onEnter={handleEnterSite} />
-          <Toaster />
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -244,8 +214,10 @@ function AppContent() {
             <LensIntro key="lens-intro" lens={introLens} onDone={closeIntro} />
           )}
         </AnimatePresence>
+        {showSplash && <SplashScreen onEnter={handleEnterSite} />}
         <Toaster />
       </div>
+      {isLoading && <PageLoader onLoadComplete={handleLoadComplete} />}
     </>
   );
 }

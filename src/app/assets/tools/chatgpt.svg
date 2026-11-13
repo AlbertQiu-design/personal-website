@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img">
+  <title>ChatGPT</title>
+  <defs>
+    <mask id="chatgpt-blossom">
+      <rect width="24" height="24" fill="#000"/>
+      <g fill="#fff" transform="translate(12 12)">
+        <circle cx="0" cy="-5.15" r="3.45"/>
+        <circle cx="4.46" cy="-2.58" r="3.45"/>
+        <circle cx="4.46" cy="2.58" r="3.45"/>
+        <circle cx="0" cy="5.15" r="3.45"/>
+        <circle cx="-4.46" cy="2.58" r="3.45"/>
+        <circle cx="-4.46" cy="-2.58" r="3.45"/>
+      </g>
+      <circle cx="12" cy="12" r="2.05" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="24" height="24" fill="#10A37F" mask="url(#chatgpt-blossom)"/>
+</svg>

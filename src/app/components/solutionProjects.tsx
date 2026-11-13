@@ -4,6 +4,7 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 // 首页卡片 + Mochi 详情页共用的封面（首页预览属于允许的全局资源）
 // 由 src/imports/____.png 压缩而来（1944×809，JPG）
 import mochiCover from '../assets/mochi/cover.jpg';
+import vantaCover from '../assets/vanta/slide-01.jpg';
 
 export type SolutionId = 'mochi' | 'vanta' | 'careeredu';
 export type SolutionStatus = 'shipped' | 'tested' | 'planned';
@@ -15,6 +16,8 @@ export interface SolutionProject {
   accentText: string;
   glow: string;
   cover?: string;
+  /** 首页卡片裁切焦点；详情页可另外传入 imagePosition */
+  imagePosition?: string;
 }
 
 export const SOLUTION_PROJECTS: Record<SolutionId, SolutionProject> = {
@@ -32,10 +35,12 @@ export const SOLUTION_PROJECTS: Record<SolutionId, SolutionProject> = {
     tagClass: 'bg-cyan-200 text-cyan-950',
     accentText: 'text-cyan-200',
     glow: 'from-cyan-300/20',
+    cover: vantaCover,
+    imagePosition: 'object-[72%_center]',
   },
   careeredu: {
     id: 'careeredu',
-    status: 'planned',
+    status: 'shipped',
     tagClass: 'bg-emerald-200 text-emerald-950',
     accentText: 'text-emerald-200',
     glow: 'from-emerald-300/20',
@@ -51,6 +56,9 @@ export const SOLUTION_ORDER: Record<Lens, SolutionId[]> = {
 };
 
 export const ALL_SOLUTION_IDS: SolutionId[] = ['mochi', 'vanta', 'careeredu'];
+
+export const CAREEREDU_SITE =
+  'https://beng-xuetang-probe.vercel.app/jobs?family=%E4%BA%A7%E5%93%81&years=%E5%BA%94%E5%B1%8A%2F%E5%AE%9E%E4%B9%A0&id=greenhouse%3A6180116004';
 
 const NOISE =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>\")";
@@ -132,11 +140,14 @@ interface ProjectCoverProps {
   large?: boolean;
   /** 封面图的 object-position（Mochi 卡片需要偏左以露出图标和字标） */
   imagePosition?: string;
+  /** 首页卡片传 false：封面只留图像。索引、状态和生成封面上的标题留给详情页。 */
+  overlay?: boolean;
 }
 
-export function ProjectCover({ project, index, className = '', large = false, imagePosition = 'object-[40%_50%]' }: ProjectCoverProps) {
+export function ProjectCover({ project, index, className = '', large = false, imagePosition, overlay = true }: ProjectCoverProps) {
   const { t } = useLanguage();
   const pad = large ? 'p-6 md:p-10' : 'p-4 md:p-5';
+  const position = imagePosition ?? project.imagePosition ?? 'object-[40%_50%]';
 
   if (project.cover) {
     return (
@@ -144,18 +155,20 @@ export function ProjectCover({ project, index, className = '', large = false, im
         <ImageWithFallback
           src={project.cover}
           alt={`${t(`project.${project.id}.title`)} cover`}
-          className={`absolute inset-0 w-full h-full object-cover ${imagePosition}`}
+          className={`absolute inset-0 w-full h-full object-cover ${position}`}
         />
-        <div className={`absolute inset-x-0 top-0 flex items-center justify-between ${pad}`}>
-          {index !== undefined ? (
-            <span className="rounded-lg bg-black/55 backdrop-blur-sm px-2.5 py-1 font-meta text-xs text-white/85">
-              {String(index + 1).padStart(2, '0')} / 03
-            </span>
-          ) : (
-            <span />
-          )}
-          <StatusPill status={project.status} onImage />
-        </div>
+        {overlay && (
+          <div className={`absolute inset-x-0 top-0 flex items-center justify-between ${pad}`}>
+            {index !== undefined ? (
+              <span className="rounded-lg bg-black/55 backdrop-blur-sm px-2.5 py-1 font-meta text-xs text-white/85">
+                {String(index + 1).padStart(2, '0')} / 03
+              </span>
+            ) : (
+              <span />
+            )}
+            <StatusPill status={project.status} onImage />
+          </div>
+        )}
       </div>
     );
   }
@@ -165,19 +178,23 @@ export function ProjectCover({ project, index, className = '', large = false, im
       <div className={`absolute inset-0 bg-gradient-to-br ${project.glow} via-zinc-950 to-black`} />
       <Motif id={project.id} />
       <div className="absolute inset-0 mix-blend-overlay opacity-40 pointer-events-none" style={{ backgroundImage: NOISE }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-      <div className={`absolute inset-0 flex flex-col justify-between ${pad}`}>
-        <div className="flex items-center justify-between font-meta text-xs text-white/60">
-          <span>{index !== undefined ? `${String(index + 1).padStart(2, '0')} / 03` : ''}</span>
-          <StatusPill status={project.status} />
-        </div>
-        <h3
-          className={`text-white leading-[0.95] tracking-tight ${large ? 'text-4xl md:text-7xl' : 'text-3xl md:text-4xl'}`}
-          style={{ fontWeight: 700 }}
-        >
-          {t(`project.${project.id}.title`)}
-        </h3>
-      </div>
+      {overlay && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+          <div className={`absolute inset-0 flex flex-col justify-between ${pad}`}>
+            <div className="flex items-center justify-between font-meta text-xs text-white/60">
+              <span>{index !== undefined ? `${String(index + 1).padStart(2, '0')} / 03` : ''}</span>
+              <StatusPill status={project.status} />
+            </div>
+            <h3
+              className={`text-white leading-[0.95] tracking-tight ${large ? 'text-4xl md:text-7xl' : 'text-3xl md:text-4xl'}`}
+              style={{ fontWeight: 700 }}
+            >
+              {t(`project.${project.id}.title`)}
+            </h3>
+          </div>
+        </>
+      )}
     </div>
   );
 }

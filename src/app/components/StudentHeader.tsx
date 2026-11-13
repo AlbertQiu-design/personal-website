@@ -1,9 +1,5 @@
 import { motion, LayoutGroup, AnimatePresence } from 'motion/react';
-import { Menu, X, Globe, Download } from 'lucide-react';
-import { downloadResume, RESUMES } from './resume';
-import { ResumeMenu } from './ResumeMenu';
-import { LensDropdown } from './LensSwitch';
-import { useLens, LENSES } from './LensContext';
+import { Menu, X, Globe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from './LanguageContext';
 
@@ -19,7 +15,6 @@ export function StudentHeader({ onLogoClick, onNavigate, isHomePage = false, cur
   const [activeSection, setActiveSection] = useState('');
   const [bgPosition, setBgPosition] = useState({ left: 0, width: 0 });
   const { language, setLanguage, t } = useLanguage();
-  const { lens, setLens } = useLens();
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -178,12 +173,6 @@ export function StudentHeader({ onLogoClick, onNavigate, isHomePage = false, cur
           {/* 右侧：语言切换 */}
           {showNav && (
             <div className="hidden md:flex items-center gap-3">
-              {/* 身份切换（lg+） */}
-              <div className="hidden lg:block">
-                <LensDropdown />
-              </div>
-              {/* 常驻简历下拉 */}
-              <ResumeMenu variant="nav" align="end" />
               {/* 语言切换按钮 */}
               <motion.button
                 onClick={toggleLanguage}
@@ -237,41 +226,6 @@ export function StudentHeader({ onLogoClick, onNavigate, isHomePage = false, cur
                 {t(item.labelKey)}
               </button>
             ))}
-            {/* 身份 */}
-            <div className="pt-2">
-              <p className="px-1 pb-2 text-xs text-white/40">{t('nav.lens')}</p>
-              <div className="grid grid-cols-3 gap-2">
-                {LENSES.map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLens(lens === l ? 'all' : l)}
-                    className={`rounded-xl px-2 py-2 text-sm font-semibold ${
-                      lens === l ? 'bg-[#DBFE02] text-black' : 'border border-white/15 text-white/70'
-                    }`}
-                    data-interactive="true"
-                  >
-                    {t(`lens.short.${l}`)}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* 简历 */}
-            <div>
-              <p className="px-1 pb-2 text-xs text-white/40">{t('nav.resume')}</p>
-              <div className="grid grid-cols-1 gap-2">
-                {RESUMES.map((r) => (
-                  <button
-                    key={r.id}
-                    onClick={() => { downloadResume(r.id); setIsMenuOpen(false); }}
-                    className="flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-white/15 text-white/85 text-sm"
-                    data-interactive="true"
-                  >
-                    {t(`resume.${r.id}`)}
-                    <Download size={14} className="text-[#DBFE02]" />
-                  </button>
-                ))}
-              </div>
-            </div>
             <button
               onClick={toggleLanguage}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/20 text-white/80"

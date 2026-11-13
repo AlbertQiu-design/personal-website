@@ -9,9 +9,8 @@ import otherWorkImage2 from "figma:asset/a3bef07b5dc1325323c3efafb5d90113a9e7dbc
 import { ContactDialog } from "./ContactDialog";
 import { useLensT } from "./LensContext";
 import { SpringText } from "./SpringText";
-import { SOLUTION_PROJECTS, SOLUTION_ORDER, ProjectCover } from "./solutionProjects";
+import { SOLUTION_PROJECTS, SOLUTION_ORDER, ProjectCover, CAREEREDU_SITE } from "./solutionProjects";
 import { ResumeMenu } from "./ResumeMenu";
-import { LensSegmented } from "./LensSwitch";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 interface Foundation {
@@ -60,25 +59,6 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
           className="pointer-events-none absolute -top-40 right-[-10%] w-[640px] h-[640px] rounded-full bg-[#DBFE02]/[0.07] blur-3xl"
         />
         <div className="relative max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8 md:mb-10"
-          >
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2 text-sm md:text-base text-white">
-                <span className="relative flex w-2.5 h-2.5">
-                  <span className="absolute inset-0 rounded-full bg-[#DBFE02] aq-breathe" />
-                  <span className="relative w-2.5 h-2.5 rounded-full bg-[#DBFE02]" />
-                </span>
-                {tl("hero.status")}
-              </span>
-              <span className="font-meta text-xs md:text-sm text-white/50">{tl("hero.avail")}</span>
-            </div>
-            <LensSegmented />
-          </motion.div>
-
           <AnimatePresence mode="wait">
             <motion.div key={lens} {...fadeUp} transition={{ duration: 0.45 }}>
               <h1
@@ -156,12 +136,9 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
                 </h2>
                 <p className="text-white/60 text-base md:text-lg max-w-xl">{t("home.solutionsDesc")}</p>
               </motion.div>
-              <span className="font-meta text-xs md:text-sm text-white/40">
-                {t("nav.lens")} · {t(`lens.short.${lens}`)}
-              </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:grid-rows-[auto_auto_auto_auto] lg:gap-x-8 lg:gap-y-0">
               {order.map((id, index) => {
                 const p = SOLUTION_PROJECTS[id];
                 const planned = p.status === "planned";
@@ -173,44 +150,44 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1, layout: { type: "spring", stiffness: 300, damping: 30 } }}
-                    className={`group cursor-pointer flex flex-col ${planned ? "opacity-80 hover:opacity-100 transition-opacity" : ""}`}
+                    className={`group flex h-full min-w-0 cursor-pointer flex-col lg:grid lg:h-auto lg:grid-rows-subgrid lg:row-span-4 ${planned ? "opacity-80 transition-opacity hover:opacity-100" : ""}`}
                     onClick={() => onProjectClick(id)}
                     data-interactive="true"
                   >
-                    <div className="relative rounded-2xl overflow-hidden mb-4">
+                    <div className="mb-4 overflow-hidden rounded-2xl">
                       <ProjectCover
                         project={p}
-                        index={index}
+                        overlay={false}
                         className="aspect-[4/3] transition-transform duration-700 group-hover:scale-[1.03]"
                       />
-                      <span className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-xl bg-white text-black px-3 py-1.5 text-sm font-medium opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                        {planned ? t("card.status.planned") : t("card.preview")}
-                        <ArrowUpRight size={14} />
-                      </span>
                     </div>
-                    {p.cover && (
-                      <h3 className="text-white text-xl md:text-2xl mb-3" style={{ fontWeight: 700 }}>
-                        {t(`project.${id}.title`)}
-                      </h3>
-                    )}
-                    <div className="flex flex-wrap gap-2 mb-3">
+                    <h3 className="mb-3 text-xl text-white md:text-2xl" style={{ fontWeight: 700 }}>
+                      {t(`project.${id}.title`)}
+                    </h3>
+                    <div className="mb-3 flex flex-wrap content-start items-start gap-2">
                       {t(`project.${id}.category`)
                         .split(" & ")
                         .map((tag) => (
-                          <span key={tag} className={`inline-block px-3 py-1 text-xs md:text-sm rounded-xl font-medium ${p.tagClass}`}>
+                          <span key={tag} className={`inline-block rounded-xl px-3 py-1 text-xs font-medium md:text-sm ${p.tagClass}`}>
                             {tag}
                           </span>
                         ))}
                     </div>
-                    <p className="text-white/60 text-sm md:text-base leading-relaxed mb-4 flex-1">
-                      {tl(`project.${id}.description`)}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/10 pt-3 font-meta text-xs text-white/60">
-                      <span>
-                        <span className="text-white/35">{t("card.role")}: </span>
-                        {t(`project.${id}.role`)}
-                      </span>
-                      <span className={`ml-auto ${p.accentText}`}>{t(`project.${id}.period`)}</span>
+                    <div className="flex flex-1 flex-col">
+                      <p className="text-sm leading-relaxed text-white/60 md:text-base">
+                        {tl(`project.${id}.description`)}
+                      </p>
+                      {id === "careeredu" && (
+                        <a
+                          href={CAREEREDU_SITE}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className={`mt-3 w-fit text-sm underline decoration-current/40 underline-offset-4 hover:decoration-current ${p.accentText}`}
+                        >
+                          {t("project.careeredu.viewSite")}
+                        </a>
+                      )}
                     </div>
                   </motion.div>
                 );

@@ -62,7 +62,7 @@ export function NeuroDriveDetail({ onNavigate }: NeuroDriveDetailProps) {
               </p>
               <p className="text-white/50 text-sm mt-2">MUSE · New York Product Design · London Design</p>
             </div>
-            <AwardCertificates className="md:col-span-8" />
+            <AwardCertificates className="md:col-span-8" ids={['muse', 'nyproduct', 'london']} />
           </motion.div>
           {/* 渲染所有图片 */}
           {images.map((image, index) => (
