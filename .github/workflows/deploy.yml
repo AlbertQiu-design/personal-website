@@ -34,7 +34,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build
-        run: pnpm build
+        # Pages + custom domain need a root base; local builds keep vite.config base './'.
+        run: pnpm exec vite build --base /
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
       - name: Upload artifact
