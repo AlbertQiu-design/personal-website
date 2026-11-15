@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { useLanguage } from './LanguageContext';
-import { CaseTLDR } from './CaseTLDR';
 import { ArrowLeft } from 'lucide-react';
 import { ProjectImage } from './ProjectImage';
 import img311 from "figma:asset/5d0cc51ab0372a92718c2f4fceb73616ea5bce93.png";
@@ -45,8 +44,6 @@ export function RobotHuiDetail({ onNavigate }: RobotHuiDetailProps) {
       {/* 图片展示区 */}
       <div className="pt-32 px-6 pb-20">
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* TL;DR 卡片 */}
-          <CaseTLDR projectKey="hui" />
           {/* 渲染所有图片 */}
           {images.map((image, index) => (
             <ProjectImage

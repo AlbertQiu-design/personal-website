@@ -3,6 +3,7 @@ import { ChevronDown, Download, FileText } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 import { useLens, LENS_RESUME } from './LensContext';
 import { RESUMES, downloadResume } from './resume';
+import { capsuleCta } from './capsuleCta';
 
 interface ResumeMenuProps {
   variant?: 'nav' | 'primary' | 'outline';
@@ -12,8 +13,8 @@ interface ResumeMenuProps {
 
 const TRIGGER: Record<NonNullable<ResumeMenuProps['variant']>, string> = {
   nav: 'px-4 py-2 rounded-xl border border-[#DBFE02]/60 text-[#DBFE02] hover:bg-[#DBFE02] hover:text-black data-[state=open]:bg-[#DBFE02] data-[state=open]:text-black font-semibold',
-  primary: 'px-7 py-3.5 rounded-xl bg-[#DBFE02] text-black hover:bg-[#b8d402] font-semibold text-base md:text-lg',
-  outline: 'px-6 md:px-7 py-3.5 rounded-xl border border-white/25 text-white hover:border-white/60 hover:bg-white/5 data-[state=open]:border-white/60 font-medium text-base md:text-lg',
+  primary: `${capsuleCta} gap-2 px-7 bg-[#DBFE02] text-black hover:bg-[#b8d402] font-semibold`,
+  outline: `${capsuleCta} gap-2 px-6 md:px-7 border border-white/25 text-white hover:border-white/60 hover:bg-white/5 data-[state=open]:border-white/60 font-medium`,
 };
 
 /** 简历下拉：三份简历，按当前身份把推荐的那份排在第一位 */

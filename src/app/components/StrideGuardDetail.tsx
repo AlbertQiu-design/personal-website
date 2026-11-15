@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { useLanguage } from './LanguageContext';
-import { CaseTLDR } from './CaseTLDR';
 import { ArrowLeft } from 'lucide-react';
 import { ProjectImage } from './ProjectImage';
 import heroImage from 'figma:asset/01bff6e7095856d511866bba62dc688b3f40335a.png';
@@ -43,8 +42,6 @@ export function StrideGuardDetail({ onNavigate }: StrideGuardDetailProps) {
       {/* 图片展示区 */}
       <div className="pt-32 px-6 pb-20">
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* TL;DR 卡片 */}
-          <CaseTLDR projectKey="project3" />
           {/* 渲染所有图片 */}
           {images.map((image, index) => (
             <ProjectImage

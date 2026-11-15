@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { useLanguage } from './LanguageContext';
-import { CaseTLDR } from './CaseTLDR';
 import { AwardCertificates } from './AwardCertificates';
 import { ArrowLeft } from 'lucide-react';
 import { ProjectImage } from './ProjectImage';
@@ -44,8 +43,6 @@ export function NeuroDriveDetail({ onNavigate }: NeuroDriveDetailProps) {
       {/* 图片展示区 */}
       <div className="pt-32 px-4 md:px-6 pb-20">
         <div className="max-w-7xl mx-auto space-y-8 md:space-y-12">
-          {/* TL;DR 卡片 */}
-          <CaseTLDR projectKey="neurodrive" />
           {/* 获奖证书 */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}

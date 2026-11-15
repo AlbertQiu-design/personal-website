@@ -21,7 +21,8 @@ export const RESUMES: ResumeItem[] = [
 ];
 
 export const CONTACT_EMAIL = 'albertqiu17@gmail.com';
-export const CONTACT_PHONE = '+852 6759 9932';
+/** HK number from the current résumés; mainland number from 邱皓惟简历.pdf, written with +86 as on the earlier contact page. */
+export const CONTACT_PHONES = ['+852 6759 9932', '+86 193 5739 4639'] as const;
 export const PORTFOLIO_URL = 'https://www.albert-designer.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/albert-qiu-7024a9440/';
 

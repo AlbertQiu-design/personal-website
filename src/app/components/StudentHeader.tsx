@@ -1,6 +1,6 @@
-import { motion, LayoutGroup, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Menu, X, Globe } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 
 interface StudentHeaderProps {
@@ -13,35 +13,13 @@ interface StudentHeaderProps {
 export function StudentHeader({ onLogoClick, onNavigate, isHomePage = false, currentPage }: StudentHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
-  const [bgPosition, setBgPosition] = useState({ left: 0, width: 0 });
   const { language, setLanguage, t } = useLanguage();
-  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 计算黄色背景的位置和宽度
   const navItems = [
     { labelKey: 'nav.work', id: 'works' },
     { labelKey: 'nav.about', id: 'about' },
     { labelKey: 'nav.contact', id: 'contact' },
   ];
-  
-  const activeIndex = navItems.findIndex(item => item.id === activeSection);
-  const showBackground = activeIndex !== -1;
-
-  // 计算黄色背景的位置
-  useEffect(() => {
-    if (activeSection && buttonRefs.current[activeSection] && containerRef.current) {
-      const button = buttonRefs.current[activeSection];
-      const container = containerRef.current;
-      const buttonRect = button.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      
-      setBgPosition({
-        left: buttonRect.left - containerRect.left,
-        width: buttonRect.width,
-      });
-    }
-  }, [activeSection, language]); // 重新计算当 activeSection 或 language 改变时
 
   const handleNavClick = (id: string) => {
     if (onNavigate) {
@@ -136,36 +114,26 @@ export function StudentHeader({ onLogoClick, onNavigate, isHomePage = false, cur
           {showNav && (
             <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center">
               {/* 导航菜单项 - 整体边框容器 */}
-              <div className="relative flex items-center gap-1 p-1 rounded-full border border-white/20 bg-white/5" ref={containerRef}>
-                {/* 单个黄色背景，通过位置移动 */}
-                {showBackground && (
-                  <motion.div
-                    className="absolute bg-[#DBFE02] rounded-full"
-                    initial={false}
-                    animate={{
-                      left: `${bgPosition.left}px`,
-                      width: `${bgPosition.width}px`,
-                      height: 'calc(100% - 8px)',
-                      top: '4px',
-                    }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-                {navItems.map((item) => (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`relative flex-1 transition-all text-lg px-4 py-2 rounded-full z-10 font-semibold ${
-                      activeSection === item.id
-                        ? 'text-black'
-                        : 'text-white/60 hover:text-white/90'
-                    }`}
-                    data-interactive="true"
-                    ref={(ref) => (buttonRefs.current[item.id] = ref)}
-                  >
-                    {t(item.labelKey)}
-                  </motion.button>
-                ))}
+              <div className="flex items-center gap-1 overflow-hidden rounded-full border border-white/20 bg-white/5 p-1">
+                {navItems.map((item) => {
+                  const isActive = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleNavClick(item.id)}
+                      className={`rounded-full px-4 py-2 text-lg font-semibold transition-colors ${
+                        isActive
+                          ? 'bg-[#DBFE02] text-black'
+                          : 'text-white/60 hover:text-white/90'
+                      }`}
+                      data-interactive="true"
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {t(item.labelKey)}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

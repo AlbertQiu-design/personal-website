@@ -5,6 +5,7 @@ import { Mail, Linkedin, Award, Briefcase, GraduationCap, MessageCircle, Trophy,
 import { LINKEDIN_URL, CONTACT_EMAIL } from './resume';
 import { SpringText } from './SpringText';
 import { ResumeMenu } from './ResumeMenu';
+import { capsuleCta } from './capsuleCta';
 import { useLensT, Lens } from './LensContext';
 import { useLanguage } from './LanguageContext';
 import profileImage from 'figma:asset/fde09790ec64109f7318444b19ec124073d2c1cb.png';
@@ -27,14 +28,15 @@ import ollamaLogo from '../assets/tools/ollama.svg';
 import seedanceLogo from '../assets/tools/seedance.svg';
 import hkustCrest from '../assets/education/hkust-crest.png';
 import cjluCrest from '../assets/education/cjlu-crest.png';
+import mcjLogo from '../assets/mcj-industry.png';
 
 interface AboutMePageProps {
   onNavigateToContact?: () => void;
 }
 
 // 经历时间线（数据驱动）
-const EXPERIENCES: { id: string; logo?: string; monogram?: string }[] = [
-  { id: 'mcj', monogram: 'MCJ' },
+const EXPERIENCES: { id: string; logo?: string; monogram?: string; lightTile?: boolean }[] = [
+  { id: 'mcj', logo: mcjLogo, lightTile: true },
   { id: 'westlake', logo: westlakeLogo },
   { id: 'zju', logo: zjuLogo },
   { id: 'asiangames', logo: asianGamesLogo },
@@ -241,7 +243,13 @@ export function AboutMePage({ onNavigateToContact }: AboutMePageProps = {}) {
                   <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-80 pointer-events-none">
                     <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
                     {exp.logo ? (
-                      <img src={exp.logo} alt="" className="absolute left-8 top-1/2 -translate-y-1/2 w-64 h-auto object-contain" />
+                      exp.lightTile ? (
+                        <div className="absolute left-8 top-1/2 w-64 -translate-y-1/2 rounded-2xl bg-white p-3.5">
+                          <img src={exp.logo} alt="" className="h-auto w-full object-contain" />
+                        </div>
+                      ) : (
+                        <img src={exp.logo} alt="" className="absolute left-8 top-1/2 -translate-y-1/2 w-64 h-auto object-contain" />
+                      )
                     ) : (
                       <span
                         className="absolute left-10 top-1/2 -translate-y-1/2 font-meta text-6xl tracking-tight text-white/80"
@@ -412,15 +420,13 @@ export function AboutMePage({ onNavigateToContact }: AboutMePageProps = {}) {
                   <div key={tool.name} className="flex items-center gap-4">
                     <div className="w-10 h-10 flex-shrink-0">{tool.logo}</div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="text-white/80 text-sm">{tool.name}</span>
-                        <div className="flex gap-1 flex-shrink-0">
-                          {[1, 2, 3, 4, 5].map((dot) => (
-                            <div key={dot} className={`w-2 h-2 rounded-full ${dot <= tool.level ? 'bg-[#DBFE02]' : 'bg-white/20'}`} />
-                          ))}
-                        </div>
-                      </div>
+                      <span className="block text-white/80 text-sm">{tool.name}</span>
                       <p className="mt-0.5 text-xs leading-snug text-white/60">{tool.use}</p>
+                    </div>
+                    <div className="flex gap-1 flex-shrink-0">
+                      {[1, 2, 3, 4, 5].map((dot) => (
+                        <div key={dot} className={`w-2 h-2 rounded-full ${dot <= tool.level ? 'bg-[#DBFE02]' : 'bg-white/20'}`} />
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -439,7 +445,7 @@ export function AboutMePage({ onNavigateToContact }: AboutMePageProps = {}) {
           <ResumeMenu variant="primary" align="center" label={t('about.downloadResume')} />
           <motion.button
             onClick={onNavigateToContact}
-            className="inline-flex items-center gap-3 bg-white/5 border border-white/20 text-white px-7 py-3.5 rounded-xl transition-all hover:bg-white/10 text-base md:text-lg"
+            className={`${capsuleCta} gap-3 bg-white/5 border border-white/20 text-white px-7 transition-all hover:bg-white/10`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-interactive="true"

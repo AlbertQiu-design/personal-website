@@ -221,7 +221,7 @@ whileTap={{ scale: 0.95 }}
 Hero（含「Viewing as」分段控件）→ Solutions in Practice（Mochi / VANTA / 求职教育网站）→ Design Foundations（4 个设计作品两列 + Other Work）→ About 预览 → Let's Connect
 
 ### 项目路由 id 与标签色
-* `mochi`：bg-blue-200 text-blue-950，真实封面 `assets/mochi/cover.jpg`，专属详情页 `MochiIslandDetail.tsx`（宣传片 + 章节 + 功能走查 + Behind the build）
+* `mochi`：bg-blue-200 text-blue-950，真实封面 `assets/mochi/cover.png`，专属详情页 `MochiIslandDetail.tsx`（宣传片 + 章节 + 功能走查 + Behind the build）
 * `vanta`：bg-cyan-200 text-cyan-950，代码绘制封面，通用模板 `SolutionCaseDetail.tsx`
 * `careeredu`：bg-emerald-200 text-emerald-950，状态 Planned
 * 设计基础：`project3` / `neurodrive` / `hui` / `project4`，卡片为 Need / Solution / Validation，Validation 标签为中性描边

@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, MessageSquare, Phone, X, Loader2, Download, Copy, Check, Linkedin, ArrowUpRight, Globe } from 'lucide-react';
+import { Mail, MessageSquare, Phone, X, Loader2, Download, Copy, Check, Linkedin, ArrowUpRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { downloadResume, RESUMES, CONTACT_EMAIL, CONTACT_PHONE, LINKEDIN_URL, PORTFOLIO_URL } from './resume';
+import { downloadResume, RESUMES, CONTACT_EMAIL, CONTACT_PHONES, LINKEDIN_URL } from './resume';
 import { useLensT, LENS_RESUME } from './LensContext';
 import { SpringText } from './SpringText';
 import { useState } from 'react';
@@ -48,15 +48,12 @@ export function ContactPage() {
           <h1 className="text-white mb-6" style={{ fontSize: '3.5rem', fontWeight: 700 }}>
             <SpringText text={t('contact.subtitle')} />
           </h1>
-          <div className="inline-flex flex-wrap items-center justify-center gap-3 mb-6">
-            <div className="inline-flex items-center gap-2.5 bg-[#DBFE02]/10 border border-[#DBFE02]/30 rounded-xl px-5 py-2.5">
-              <span className="relative flex w-2.5 h-2.5">
-                <span className="absolute inset-0 rounded-full bg-[#DBFE02] aq-breathe" />
-                <span className="relative w-2.5 h-2.5 rounded-full bg-[#DBFE02]" />
-              </span>
-              <span className="text-[#DBFE02]">{tl('contact.available')}</span>
-            </div>
-            <span className="font-meta text-xs md:text-sm text-white/50">{tl('hero.avail')}</span>
+          <div className="inline-flex items-center justify-center gap-2.5 mb-6">
+            <span className="relative flex w-2.5 h-2.5">
+              <span className="absolute inset-0 rounded-full bg-[#DBFE02] aq-breathe" />
+              <span className="relative w-2.5 h-2.5 rounded-full bg-[#DBFE02]" />
+            </span>
+            <span className="text-[#DBFE02]">{tl('contact.available')}</span>
           </div>
           <motion.div 
             className="w-24 h-1 bg-[#DBFE02] mb-8 mx-auto"
@@ -142,38 +139,30 @@ export function ContactPage() {
               </div>
             </motion.button>
 
-            <motion.a
-              href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
-              className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-5 md:p-6 hover:bg-white/10 transition-all"
-              whileHover={{ x: 5 }}
-              data-interactive="true"
-            >
-              <div className="bg-[#DBFE02]/10 p-3 rounded-xl">
+            <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-5 md:p-6">
+              <div className="bg-[#DBFE02]/10 p-3 rounded-xl shrink-0">
                 <Phone className="text-[#DBFE02]" size={24} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-white mb-1">{t('contact.phone')}</h3>
-                <p className="text-white/60 font-meta text-sm md:text-base">{CONTACT_PHONE}</p>
+                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-baseline">
+                  {CONTACT_PHONES.map((phone, index) => (
+                    <span key={phone} className="inline-flex items-baseline">
+                      {index > 0 && (
+                        <span className="hidden sm:inline text-white/30 mx-2" aria-hidden="true">·</span>
+                      )}
+                      <a
+                        href={`tel:${phone.replace(/\s/g, '')}`}
+                        className="text-white/60 font-meta text-sm md:text-base hover:text-white transition-colors"
+                        data-interactive="true"
+                      >
+                        {phone}
+                      </a>
+                    </span>
+                  ))}
+                </div>
               </div>
-            </motion.a>
-
-            <motion.a
-              href={PORTFOLIO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-5 md:p-6 hover:bg-white/10 transition-all"
-              whileHover={{ x: 5 }}
-              data-interactive="true"
-            >
-              <div className="bg-[#DBFE02]/10 p-3 rounded-xl">
-                <Globe className="text-[#DBFE02]" size={24} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white mb-1">{t('contact.portfolio')}</h3>
-                <p className="text-white/60 font-meta text-sm md:text-base truncate">www.albert-designer.com</p>
-              </div>
-              <ArrowUpRight className="text-white/40" size={20} />
-            </motion.a>
+            </div>
 
             {/* 三份简历 */}
             <div className="pt-4">

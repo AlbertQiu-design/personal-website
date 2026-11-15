@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { useLanguage } from './LanguageContext';
-import { CaseTLDR } from './CaseTLDR';
 import { ArrowLeft } from 'lucide-react';
 import { ProjectImage } from './ProjectImage';
 import img411 from "figma:asset/cd785f41f1702fdf45456e39bb87e0c40fb4b99d.png";
@@ -41,8 +40,6 @@ export function SkysafeHerosDetail({ onNavigate }: SkysafeHerosDetailProps) {
       {/* 图片展示区 */}
       <div className="pt-32 px-6 pb-20">
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* TL;DR 卡片 */}
-          <CaseTLDR projectKey="project4" />
           {/* 渲染所有图片 */}
           {images.map((image, index) => (
             <ProjectImage

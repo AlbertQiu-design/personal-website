@@ -11,6 +11,7 @@ import { useLensT } from "./LensContext";
 import { SpringText } from "./SpringText";
 import { SOLUTION_PROJECTS, SOLUTION_ORDER, ProjectCover, CAREEREDU_SITE } from "./solutionProjects";
 import { ResumeMenu } from "./ResumeMenu";
+import { capsuleCta } from "./capsuleCta";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 interface Foundation {
@@ -81,7 +82,7 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
           >
             <motion.button
               onClick={() => document.getElementById("works")?.scrollIntoView({ behavior: "smooth" })}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#DBFE02] px-6 md:px-7 py-3.5 text-black font-semibold text-base md:text-lg hover:bg-[#b8d402] transition-colors"
+              className={`${capsuleCta} gap-2 bg-[#DBFE02] px-6 md:px-7 font-semibold text-black hover:bg-[#b8d402] transition-colors`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               data-interactive="true"
@@ -259,20 +260,13 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
                     {[
                       { label: "card.need", key: "description" },
                       { label: "card.solution", key: "decision" },
+                      { label: "card.validation", key: "outcome" },
                     ].map((row) => (
                       <div key={row.key} className="grid grid-cols-[5.5rem_1fr] gap-3">
                         <dt className="font-meta text-[11px] uppercase tracking-wider text-white/40 pt-1">{t(row.label)}</dt>
                         <dd className="text-white/75">{t(`project.${f.id}.${row.key}`)}</dd>
                       </div>
                     ))}
-                    <div className="grid grid-cols-[5.5rem_1fr] gap-3 items-center">
-                      <dt className="font-meta text-[11px] uppercase tracking-wider text-white/40">{t("card.validation")}</dt>
-                      <dd>
-                        <span className="inline-flex rounded-xl border border-white/20 px-2.5 py-1 font-meta text-xs text-white/80">
-                          {t(`project.${f.id}.outcome`)}
-                        </span>
-                      </dd>
-                    </div>
                   </dl>
                 </motion.div>
               ))}
@@ -353,7 +347,7 @@ export function HomePage({ onProjectClick, onNavigateToAbout, onNavigateToContac
           <p className="text-white/60 mb-6 md:mb-8 text-base md:text-lg">{t("home.contactDescription")}</p>
           <motion.button
             onClick={onNavigateToContact}
-            className="inline-block text-[#DBFE02] border-2 border-[#DBFE02] px-6 md:px-8 py-3 md:py-4 rounded-xl hover:bg-[#DBFE02] hover:text-black transition-all duration-300 text-base md:text-lg"
+            className={`${capsuleCta} border-2 border-[#DBFE02] px-6 md:px-8 text-[#DBFE02] hover:bg-[#DBFE02] hover:text-black transition-all duration-300`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-interactive="true"

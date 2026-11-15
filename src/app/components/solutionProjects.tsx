@@ -2,9 +2,9 @@ import { useLanguage } from './LanguageContext';
 import type { Lens } from './LensContext';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 // 首页卡片 + Mochi 详情页共用的封面（首页预览属于允许的全局资源）
-// 由 src/imports/____.png 压缩而来（1944×809，JPG）
-import mochiCover from '../assets/mochi/cover.jpg';
+import mochiCover from '../assets/mochi/cover.png';
 import vantaCover from '../assets/vanta/slide-01.jpg';
+import academyCover from '../assets/academy/cover.jpg';
 
 export type SolutionId = 'mochi' | 'vanta' | 'careeredu';
 export type SolutionStatus = 'shipped' | 'tested' | 'planned';
@@ -28,6 +28,8 @@ export const SOLUTION_PROJECTS: Record<SolutionId, SolutionProject> = {
     accentText: 'text-blue-300',
     glow: 'from-blue-400/25',
     cover: mochiCover,
+    // 新封面接近 4:3；居中裁切，避免旧的偏左焦点切掉右侧字标
+    imagePosition: 'object-center',
   },
   vanta: {
     id: 'vanta',
@@ -44,6 +46,8 @@ export const SOLUTION_PROJECTS: Record<SolutionId, SolutionProject> = {
     tagClass: 'bg-emerald-200 text-emerald-950',
     accentText: 'text-emerald-200',
     glow: 'from-emerald-300/20',
+    cover: academyCover,
+    imagePosition: 'object-center',
   },
 };
 

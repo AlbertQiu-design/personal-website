@@ -40,6 +40,7 @@ export function SolutionCaseDetail({ projectId, onNavigate, leading }: SolutionC
             <ProjectCover
               project={project}
               large
+              overlay={projectId !== 'careeredu'}
               imagePosition={project.cover ? 'object-center' : undefined}
               className={`rounded-3xl ${project.cover ? 'aspect-video' : 'aspect-[4/3] md:aspect-[21/9]'}`}
             />

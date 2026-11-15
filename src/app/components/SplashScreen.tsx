@@ -2,7 +2,6 @@ import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "./LanguageContext";
 import { Lens, LENSES } from "./LensContext";
-import { ArrowRight } from "lucide-react";
 
 interface SplashScreenProps {
   onEnter: (lens: Lens) => void;
@@ -27,15 +26,10 @@ export function SplashScreen({ onEnter }: SplashScreenProps) {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") choose("all");
-    };
-    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
     };
-  }, [choose]);
+  }, []);
 
   return (
     <motion.div
@@ -49,10 +43,8 @@ export function SplashScreen({ onEnter }: SplashScreenProps) {
       aria-labelledby="splash-prompt"
       data-splash-overlay="true"
     >
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-lg"
-        aria-hidden="true"
-      />
+      {/* 顶栏高度：桌面 83px，窄屏 77px。模糊层从顶栏下沿开始，避免把导航高亮涂成溢出的圆。 */}
+      <div className="absolute inset-x-0 bottom-0 top-[77px] bg-black/50 backdrop-blur-lg md:top-[83px]" aria-hidden="true" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-16">
         <motion.div
@@ -75,7 +67,7 @@ export function SplashScreen({ onEnter }: SplashScreenProps) {
                 key={lens}
                 type="button"
                 onClick={() => choose(lens)}
-                className="group rounded-2xl bg-white px-6 py-5 text-left text-black shadow-[0_24px_60px_rgba(0,0,0,0.45)] transition-colors duration-200 hover:bg-[#DBFE02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBFE02] focus-visible:ring-offset-2 focus-visible:ring-offset-black md:px-7 md:py-6"
+                className="w-full rounded-full border border-white/45 bg-[#161616] px-5 py-2.5 text-center text-lg font-semibold text-white transition-colors duration-200 hover:bg-[#242424] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 md:px-6 md:py-3 md:text-xl"
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.08 + i * 0.06 }}
@@ -83,26 +75,11 @@ export function SplashScreen({ onEnter }: SplashScreenProps) {
                 data-interactive="true"
                 data-splash-lens={lens}
               >
-                <span
-                  className="block text-xl leading-snug tracking-tight md:text-2xl"
-                  style={{ fontWeight: 700 }}
-                >
+                <span className="block whitespace-nowrap leading-none tracking-tight">
                   {t(`lens.${lens}`)}
                 </span>
               </motion.button>
             ))}
-          </div>
-
-          <div className="mt-5 flex justify-center">
-            <button
-              type="button"
-              onClick={() => choose("all")}
-              className="group inline-flex items-center gap-2 px-2 py-1.5 text-sm text-white/55 transition-colors hover:text-white"
-              data-interactive="true"
-            >
-              {t("splash.browse")}
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-            </button>
           </div>
         </motion.div>
       </div>
